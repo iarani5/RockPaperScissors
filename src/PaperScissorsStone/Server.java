@@ -1,15 +1,3 @@
-/**
- * The server class waits for the connection of the two clients client_1
- * and client_2 (in either order) on port 1337. Receives one character
- * from client_1 and one character from client_2 (in either order) and
- * calculates the winner of the game based on a rule set. After sending a
- * correspondent massage to each client the server waits again for two
- * clients to connect.
- *
- * @author Mathias Schilling <https://github.com/pinkbigmacmedia>
- * @version 1.0
- * 
- */
 
 package PaperScissorsStone;
 
@@ -23,28 +11,13 @@ public class Server {
 
 	private static Double versionNumber = 1.0;
 
-	private static String welcomeMsg = "--- Welcome to Paper Scissors Stone Server V. " + versionNumber + " --- \n";
-
-	private static boolean validPort(Integer x) {
-		return x >= 1 && x <= 65535 ? true : false;
-	}
+	private static String welcomeMsg = "--- Server iniciado. Juego: piedra, papel o tijera" + versionNumber + " --- \n";
 
 	private static int getPort() {
 
 		Integer input = 0;
-
 		Scanner sc = new Scanner(System.in);
-
-		/*do {
-			System.out.print("Please select a port by entering an integer value between 1 and 65535 or\n");
-			System.out.print("insert \"0\" in order to continue with the default setting (" + Server.port + "): ");
-			input = 0;
-			//sc.nextInt();
-
-		} while (input != 0 && !Server.validPort(input));*/
-		//input = 0;
 		sc.close();
-
 		return input == 0 ? Server.port : input;
 	}
 
@@ -55,39 +28,37 @@ public class Server {
 		String inputClient_1;
 		String inputClient_2;
 		
+		//contador para cantidad de partidas ganadas
 		int puntaje_cliente_1 = 0;
 		int puntaje_cliente_2 = 0;
 
-
+		//cantidad total de partidas jugadas
 		int round = 0;
-		// Print welcome msg
+		
+		//mensjae de conexion al server
 		System.out.println(Server.welcomeMsg);
 
-		// Set port
 		Server.port = Server.getPort();
 
-		// Create new server socket & dump out a status msg
+		// utilizacion de clase server socket para conexion de 2 clientes
 		ServerSocket welcomeSocket = new ServerSocket(Server.port);
 		System.out.println("\nOk, we're up and running on port " + welcomeSocket.getLocalPort() + " ...");
 
-		
-			
-				
-				// Jugador #1
+		 // Jugador #1
 				Socket client_1 = welcomeSocket.accept();
 				if (client_1.isConnected()) {
-					System.out.println("\nPlayer one (" + (client_1.getLocalAddress().toString()).substring(1) + ":"
-							+ client_1.getLocalPort() + ") has joined ... waiting for player two ...");
+					System.out.println("\nEl Jugador #1 (" + (client_1.getLocalAddress().toString()).substring(1) + ":"
+							+ client_1.getLocalPort() + ") se unió ... esperando al Jugador #2 ...");
 					DataOutputStream outClient_1 = new DataOutputStream(client_1.getOutputStream());
 					outClient_1.writeBytes("Jugador #1\n");
 				}
 			
 	
-				// Jugador #2
+		// Jugador #2
 				Socket client_2 = welcomeSocket.accept();
 				if (client_2.isConnected()) {
-					System.out.println("Player two (" + (client_2.getLocalAddress().toString()).substring(1) + ":"
-							+ client_1.getLocalPort() + ") has joined ... lets start ...");
+					System.out.println("El Jugador #2 (" + (client_2.getLocalAddress().toString()).substring(1) + ":"
+							+ client_1.getLocalPort() + ") se unió ... comenzando el juego ...");
 					DataOutputStream outClient_2 = new DataOutputStream(client_2.getOutputStream());
 					outClient_2.writeBytes("Jugador #2\n");
 				}
@@ -102,10 +73,19 @@ public class Server {
 
 				round++;
 
+				//server lee los datos enviados por cada cliente
 				inputClient_1 = inClient_1.readLine();
 				inputClient_2 = inClient_2.readLine();
 				System.out.println("\nRound #"+round);
 
+				// Logica del juego piedra, papel o tijera
+				
+				/* Valores
+				 * P: papel
+				 * R: piedra
+				 * S: tijeras
+				 */
+				
 				if (inputClient_1.equals(inputClient_2)) {
 					resClient_1 = "Es un empate";
 					resClient_2 = "Es un empate";
@@ -149,6 +129,7 @@ public class Server {
 					puntaje_cliente_2++;
 				}
 		
+				//al final de cada partida el server se fija los contadores de puntos 
 				if(puntaje_cliente_2==3||puntaje_cliente_1==3) {
 					if(puntaje_cliente_2 == 3) {
 						System.out.println("\nPartida finalizada, Gana el jugador #2");
@@ -161,6 +142,7 @@ public class Server {
 						outClient_2.writeBytes("Round #"+round+" Partida finalizada Ganaste!\n");
 					}
 					
+					//fin del juego
 					client_1.close();
 					client_2.close();
 					break;

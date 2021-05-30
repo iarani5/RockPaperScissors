@@ -13,7 +13,7 @@ import java.net.*;
 
 class Client extends JFrame implements ActionListener   {
 
-	// A T R I B U T O S
+	// A T R I B U T O S de UI
 	private JButton boton1,boton2,boton3, next;
 	public static JFrame frame;
 	private static JPanel panel;
@@ -26,13 +26,9 @@ class Client extends JFrame implements ActionListener   {
 	private	static Socket clientSocket;
 	private	static DataOutputStream outToServer;
 	private	static BufferedReader inFromServer;
-		
 	private static final long serialVersionUID = 1L;
-
     private static String host = "localhost";
-
     private static Integer port = 1337;
-
     private static Double versionNumber = 1.0;
 
     // titulo de la ventana
@@ -43,16 +39,17 @@ class Client extends JFrame implements ActionListener   {
     //constructor
     public Client() {
     	
+    	//Creacion de la interfaz 
     	 frame = new JFrame();  
          panel = new JPanel();  
          panel.setLayout(new FlowLayout());  
-         panel.setBounds(0,0,750,450);
+         panel.setBounds(0,0,500,350);
          
-        // selected  = new javax.swing.JTextField();
+         //le informará a cada jugador la eleccion realizada en esa partida
 		 selected.setEditable(false);
 		 selected.setHorizontalAlignment(JTextField.CENTER);
 		 selected.setBackground(MY_Yellow);
-		 selected.setBounds(200,290,400,20);
+		 selected.setBounds(50,190,400,20);
 		 selected.setFont(new Font("Verdana", Font.PLAIN, 13));
 
 		 setLayout(null);
@@ -78,10 +75,11 @@ class Client extends JFrame implements ActionListener   {
 	     
 	     frame.add(panel);  
 
-	     frame.setBounds(0,0,850,450);
+	     frame.setBounds(0,0,500,350);
 	     frame.setVisible(true);
 	     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	     
+	     //mediante los action listeners se le cambiará el color al boton seleccionado
 	     boton1.addActionListener(new ActionListener() {
 		     public void actionPerformed(ActionEvent ae) {
 		    	 boton1.setBackground(Color.WHITE);
@@ -133,7 +131,7 @@ class Client extends JFrame implements ActionListener   {
      
 	 	Client formulario1 = new Client();
 
-    	// TITLE PLAYER 
+    	// Titulo para las ventanas, se recibe del servidor el numero de jugador
 	 	try {
 	 		Client.inFromServer = new BufferedReader(new InputStreamReader(
 	 				clientSocket.getInputStream()));
@@ -159,12 +157,12 @@ class Client extends JFrame implements ActionListener   {
 		}
 		
 		// respuesta del server
-		   menssage.setBounds(200,320,400,20);
+		   menssage.setBounds(50,220,400,20);
 		   menssage.setEditable(false);
 		   menssage.setHorizontalAlignment(JTextField.CENTER);
 		   menssage.setBackground(MY_Yellow);
 		     
-		// TODO Auto-generated method stub
+		// Mensaje del cliente al servidor con el valor del boton seleccionado
 		 if (e.getSource()==boton1) {		  
 		
          	try {
@@ -194,7 +192,7 @@ class Client extends JFrame implements ActionListener   {
     		}
          }    
 	     
-		 
+		// respuesta del servidor
 	    try {
 		    String response = "";
 			response = inFromServer.readLine();
@@ -203,6 +201,7 @@ class Client extends JFrame implements ActionListener   {
 			menssage.setText(response);
 			frame.add(menssage);
 			
+			//fin del juego
 			if(response.contains("Partida finalizada")){
 				 boton1.setVisible(false);
 				 boton2.setVisible(false);
