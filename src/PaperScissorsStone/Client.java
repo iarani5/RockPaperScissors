@@ -12,27 +12,31 @@
 
 package PaperScissorsStone;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 
 
-
-class Client extends JFrame implements ActionListener{
+class Client extends JFrame implements ActionListener   {
 
 	// A T R I B U T O S
 	private JButton boton1,boton2,boton3;
-	private String input;
-	private String response;
+	public JFrame marco;
+	
+	public static final Color MY_Yellow = new Color(255,216,59);
 	
 	private static BufferedReader inFromUser;
 	private	static Socket clientSocket;
 	private	static DataOutputStream outToServer;
 	private	static BufferedReader inFromServer;
 		
-	
 	private static final long serialVersionUID = 1L;
 
     private static String host = "localhost";
@@ -45,25 +49,26 @@ class Client extends JFrame implements ActionListener{
 	//    + versionNumber + " --- \n";
 
   //  private static String msgRules = "\nRule set:\n - (R)ock beats (S)cissors\n - (S)cissors beats (P)aper\n - (P)aper beats (R)ock\n";
-
     
     //constructor
     public Client() {
-
-		setLayout(null);
+    	 //Border emptyBorder = BorderFactory.createEmptyBorder();
+    	 
+		 setLayout(null);
 	     boton1=new JButton(new ImageIcon("src/img/papel.png"));
-	     boton1.setBounds(10,100,160,220);
+	     boton1.setBounds(230,100,160,220);
 	     add(boton1);
 	     boton1.addActionListener(this);
+	     
 	     boton2=new JButton(new ImageIcon("src/img/piedra.png"));
-	     boton2.setBounds(230,100,160,220);
+	     boton2.setBounds(10,100,160,220);
 	     add(boton2);
 	     boton2.addActionListener(this);
+	     
 	     boton3=new JButton(new ImageIcon("src/img/tijera.png"));
 	     boton3.setBounds(450,100,160,220);
 	     add(boton3);
 	     boton3.addActionListener(this);        	
-	   
      }
     
     public static void main(String args[]) throws Exception {
@@ -77,13 +82,34 @@ class Client extends JFrame implements ActionListener{
     	Client.inFromServer = new BufferedReader(new InputStreamReader(
     			clientSocket.getInputStream()));
 
-	
-	Client formulario1= new Client();
-    formulario1.setBounds(0,0,650,450);
-    formulario1.setVisible(true);
-    formulario1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
-	while (true){
+
+
+	JLabel label1=new JLabel("Sistema de Facturación.");
+    label1.setBounds(10,20,300,30);
+     
+	 	try {
+	 		Client.inFromServer = new BufferedReader(new InputStreamReader(
+	 				clientSocket.getInputStream()));
+	 		String response = inFromServer.readLine();
+	 		label1 = new JLabel(response);
+	 	    System.out.println(response);
+	 	    System.out.println(label1);
+	 	 
+	 	} catch (IOException e2) {
+	 		// TODO Auto-generated catch block
+	 		e2.printStackTrace();
+	 	}
+	 
+	 	Client formulario1 = new Client();
+	    formulario1.setBounds(0,0,650,450);
+	    formulario1.setVisible(true);
+	    formulario1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    formulario1.getContentPane().setBackground(MY_Yellow);
+	    formulario1.getContentPane().add(label1);
+
+	 	// add(titulo);
+	    
+	//while (true){
         
 	/*	do {
 	
@@ -123,10 +149,20 @@ class Client extends JFrame implements ActionListener{
 		// Close socket
 		//clientSocket.close();
 	
-		}
+		//}
+
     }
 
 	public void actionPerformed(ActionEvent e) {
+		
+		try {
+			Client.inFromServer = new BufferedReader(new InputStreamReader(
+					clientSocket.getInputStream()));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		
 		// TODO Auto-generated method stub
 		 if (e.getSource()==boton1) {
@@ -157,5 +193,17 @@ class Client extends JFrame implements ActionListener{
     			e1.printStackTrace();
     		}
          }    
+		 
+	    String response = "";
+		
+	    try {
+			response = inFromServer.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		    System.out.println(response);
+		    
 	}
+
 }

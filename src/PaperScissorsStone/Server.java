@@ -78,6 +78,8 @@ public class Server {
 				if (client_1.isConnected()) {
 					System.out.println("\nPlayer one (" + (client_1.getLocalAddress().toString()).substring(1) + ":"
 							+ client_1.getLocalPort() + ") has joined ... waiting for player two ...");
+					DataOutputStream outClient_1 = new DataOutputStream(client_1.getOutputStream());
+					outClient_1.writeBytes("Jugador #1\n");
 				}
 			
 	
@@ -86,6 +88,8 @@ public class Server {
 				if (client_2.isConnected()) {
 					System.out.println("Player two (" + (client_2.getLocalAddress().toString()).substring(1) + ":"
 							+ client_1.getLocalPort() + ") has joined ... lets start ...");
+					DataOutputStream outClient_2 = new DataOutputStream(client_2.getOutputStream());
+					outClient_2.writeBytes("Jugador #2\n");
 				}
 				
 				while(true){
