@@ -31,17 +31,18 @@ public class Server {
 
 	private static int getPort() {
 
-		Integer input;
+		Integer input = 0;
 
 		Scanner sc = new Scanner(System.in);
 
-		do {
+		/*do {
 			System.out.print("Please select a port by entering an integer value between 1 and 65535 or\n");
 			System.out.print("insert \"0\" in order to continue with the default setting (" + Server.port + "): ");
-			input = sc.nextInt();
+			input = 0;
+			//sc.nextInt();
 
-		} while (input != 0 && !Server.validPort(input));
-
+		} while (input != 0 && !Server.validPort(input));*/
+		//input = 0;
 		sc.close();
 
 		return input == 0 ? Server.port : input;
@@ -71,9 +72,8 @@ public class Server {
 
 		
 			
-			//while (i<=2) { //!welcomeSocket.isClosed()||
 				
-				// Player one
+				// Jugador #1
 				Socket client_1 = welcomeSocket.accept();
 				if (client_1.isConnected()) {
 					System.out.println("\nPlayer one (" + (client_1.getLocalAddress().toString()).substring(1) + ":"
@@ -83,7 +83,7 @@ public class Server {
 				}
 			
 	
-				// Player two
+				// Jugador #2
 				Socket client_2 = welcomeSocket.accept();
 				if (client_2.isConnected()) {
 					System.out.println("Player two (" + (client_2.getLocalAddress().toString()).substring(1) + ":"
@@ -102,97 +102,63 @@ public class Server {
 
 				round++;
 
-				// Get client inputs
 				inputClient_1 = inClient_1.readLine();
 				inputClient_2 = inClient_2.readLine();
 				System.out.println("\nRound #"+round);
 
-				/**
-				 * If the characters received from C1 and C2 are the same then the
-				 * server sends back to both clients the string "DRAW".
-				 */
 				if (inputClient_1.equals(inputClient_2)) {
-					resClient_1 = "Draw";
-					resClient_2 = "Draw";
-					System.out.println("It's a draw.");
+					resClient_1 = "Es un empate";
+					resClient_2 = "Es un empate";
+					System.out.println("Es un empate");
 				}
-				/**
-				 * If the server receives ’R’ from C1 and ’S’ from C2 it sends the
-				 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.
-				 */
 				else if (inputClient_1.equals("R") && inputClient_2.equals("S")) {
-					resClient_1 = "You win";
-					resClient_2 = "You lose";
-					System.out.println("Player one wins.");
+					resClient_1 = "Ganaste!";
+					resClient_2 = "Perdiste :(";
+					System.out.println("Gana el Jugador #1");
 					puntaje_cliente_1++;
 	
 				}
-				/**
-				 * If the server receives ’S’ from C1 and ’R’ from C2 it sends the
-				 * string "YOU LOSE" to C1 and the string "YOU WIN" to C2.
-				 */
 				else if (inputClient_1.equals("S") && inputClient_2.equals("R")) {
-					resClient_1 = "You lose";
-					resClient_2 = "You win";
-					System.out.println("Player two wins.");
+					resClient_1 = "Perdiste :(";
+					resClient_2 = "Ganaste!";
+					System.out.println("Gana el jugador #2");
 					puntaje_cliente_2++;
 				}
-				/**
-				 * If the server receives ’R’ from C1 and ’P’ from C2 it sends the
-				 * string "YOU LOSE" to C1 and the string "YOU WIN" to C2.
-				 */
 				else if (inputClient_1.equals("R") && inputClient_2.equals("P")) {
-					resClient_1 = "You lose";
-					resClient_2 = "You win";
-					System.out.println("Player two wins.");
+					resClient_1 = "Perdiste :(";
+					resClient_2 = "Ganaste!";
+					System.out.println("Gana el jugador #2");
 					puntaje_cliente_2++;
 				}
-				/**
-				 * If the server receives ’P’ from C1 and ’R’ from C2 it sends the
-				 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.
-				 */
 				else if (inputClient_1.equals("P") && inputClient_2.equals("R")) {
-					resClient_1 = "You win";
-					resClient_2 = "You lose";
-					System.out.println("Player one wins.");
+					resClient_1 = "Ganaste!";
+					resClient_2 = "Perdiste :(";
+					System.out.println("Gana el Jugador #1");
 					puntaje_cliente_1++;
 				}
-				/**
-				 * If the server receives ’S’ from C1 and ’P’ from C2 it sends the
-				 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.
-				 */
 				else if (inputClient_1.equals("S") && inputClient_2.equals("P")) {
-					resClient_1 = "You win";
-					resClient_2 = "You lose";
-					System.out.println("Player one wins.");
+					resClient_1 = "Ganaste!";
+					resClient_2 = "Perdiste :(";
+					System.out.println("Gana el Jugador #1");
 					puntaje_cliente_1++;
 				}
-				/**
-				 * If the server receives ’P’ from C1 and ’S’ from C2 it sends the
-				 0* string "YOU LOSE" to C1 and the string "YOU WIN" to C2.
-				 */
 				else if (inputClient_1.equals("P") && inputClient_2.equals("S")) {
-					resClient_1 = "You lose";
-					resClient_2 = "You win";
-					System.out.println("Player two wins.");
+					resClient_1 = "Perdiste :(";
+					resClient_2 = "Ganaste!";
+					System.out.println("Gana el jugador #2");
 					puntaje_cliente_2++;
 				}
-	
-				
-				//client_1.close();
-				//client_2.close();
-	
-				//System.out.println("\nWaiting for new players ...\n");
+		
 				if(puntaje_cliente_2==3||puntaje_cliente_1==3) {
 					if(puntaje_cliente_2 == 3) {
-						System.out.println("\nPartida finalizada, ganador Player two ");
-						outClient_1.writeBytes("Round #"+round+" --> "+resClient_1.toUpperCase()+" --> Partida finalizada Ganaste!\n");
-						outClient_2.writeBytes("Round #"+round+" --> "+resClient_2.toUpperCase()+" --> Partida finalizada Perdiste!\n");
+						System.out.println("\nPartida finalizada, Gana el jugador #2");
+						outClient_1.writeBytes("Round #"+round+" Partida finalizada Ganaste!\n");
+						outClient_2.writeBytes("Round #"+round+" Partida finalizada Perdiste!\n");
 					}
 					else{
-						System.out.println("\nPartida finalizada, ganador Player one ");
-						outClient_1.writeBytes("Round #"+round+" --> "+resClient_1.toUpperCase()+" --> Partida finalizada Perdiste!\n");
-						outClient_2.writeBytes("Round #"+round+" --> "+resClient_2.toUpperCase()+" --> Partida finalizada Ganaste!\n");
+						System.out.println("\nPartida finalizada, Gana el Jugador #1");
+						outClient_1.writeBytes("Round #"+round+" Partida finalizada Perdiste!\n");
+						outClient_2.writeBytes("Round #"+round+" Partida finalizada Ganaste!\n");
 					}
 					
 					client_1.close();
@@ -200,11 +166,9 @@ public class Server {
 					break;
 				}
 				else {
-					// Send responses in uppercase and close sockets
-					outClient_1.writeBytes("Round #"+round+" --> "+resClient_1.toUpperCase()+"\n");
-					outClient_2.writeBytes("Round #"+round+" --> "+resClient_2.toUpperCase()+"\n");
+					outClient_1.writeBytes("Round #"+round+" - "+resClient_1.toUpperCase()+"\n");
+					outClient_2.writeBytes("Round #"+round+" - "+resClient_2.toUpperCase()+"\n");
 				}
-			//}
 		}
 	}
 }
