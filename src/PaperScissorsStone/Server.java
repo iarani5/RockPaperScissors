@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-public class Server {
+public class Server extends Thread{
 
 	private static Integer port = 1337;
 
@@ -42,8 +42,9 @@ public class Server {
 
 		// utilizacion de clase server socket para conexion de 2 clientes
 		ServerSocket welcomeSocket = new ServerSocket(Server.port);
-		System.out.println("\nOk, we're up and running on port " + welcomeSocket.getLocalPort() + " ...");
+		System.out.println("\nCorriendo en el puerto " + welcomeSocket.getLocalPort() + " ...");
 
+		
 		 // Jugador #1
 				Socket client_1 = welcomeSocket.accept();
 				if (client_1.isConnected()) {
